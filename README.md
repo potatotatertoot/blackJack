@@ -3,7 +3,7 @@ Blackjack Game Simulator
 
 Project Title: Blackjack Game Simulator with Probability Analysis
 
-Authors / Team Members: Nathan Wong, [Add other team members if any]
+Team Members: Nathan Wong
 
 Date Published: December 18, 2025
 
@@ -13,7 +13,7 @@ This project is a C++ Blackjack game simulator designed to provide an interactiv
 
 Programming Approaches Used:
 
-Object-Oriented Programming (OOP): Classes and structs are used to represent cards, hands, decks, and the game logic.
+Object-Oriented Programming: Classes and structs are used to represent cards, hands, decks, and the game logic.
 
 Vectors: Store collections of cards for decks, hands, and remaining cards.
 
