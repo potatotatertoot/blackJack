@@ -84,7 +84,7 @@ public:
             value += card.value;
             if (card.rank == "A") aces++;
         }
-        
+
         while (value > 21 && aces > 0) {
             value -= 10;
             aces--;
@@ -144,18 +144,14 @@ public:
         int playerValue = playerHand.getValue();
         
         if (playerHand.isBust()) return 0.0;
-        
-        // Get dealer's visible card
+
         int dealerUpCard = dealerHand.getCard(1).value;
-        
-        // Simulate dealer outcomes
+
         map<int, int> dealerOutcomes;
         int totalSimulations = 0;
-        
-        // For each possible dealer hand completion
+
         simulateDealerHands(dealerHand.getValue(), remainingCards, dealerOutcomes, totalSimulations);
-        
-        // Calculate win probability
+
         int wins = 0;
         int losses = 0;
         int ties = 0;
@@ -165,7 +161,7 @@ public:
             int count = outcome.second;
             
             if (dealerFinal > 21) {
-                wins += count; // Dealer busts
+                wins += count;
             } else if (playerValue > dealerFinal) {
                 wins += count;
             } else if (playerValue < dealerFinal) {
@@ -182,28 +178,24 @@ public:
 private:
     static void simulateDealerHands(int dealerValue, const vector<Card>& remaining,
                                    map<int, int>& outcomes, int& total, int depth = 0) {
-        // Limit recursion depth for performance
         if (depth > 5) {
             outcomes[dealerValue]++;
             total++;
             return;
         }
-        
-        // Dealer stands on 17 or more
+
         if (dealerValue >= 17) {
             outcomes[dealerValue]++;
             total++;
             return;
         }
-        
-        // Dealer must hit on 16 or less
+
         if (remaining.empty()) {
             outcomes[dealerValue]++;
             total++;
             return;
         }
-        
-        // Try each remaining card
+
         map<int, int> cardValueCounts;
         for (const Card& card : remaining) {
             int val = card.value;
@@ -215,16 +207,13 @@ private:
             int count = cardCount.second;
             
             int newValue = dealerValue + cardValue;
-            
-            // Handle ace adjustment
+
             if (newValue > 21 && cardValue == 11) {
                 newValue -= 10;
             }
-            
-            // Calculate probability weight
+
             double weight = (double)count / remaining.size();
-            
-            // Recursive call with reduced deck
+
             vector<Card> newRemaining = remaining;
             auto it = find_if(newRemaining.begin(), newRemaining.end(),
                             [cardValue](const Card& c) { return c.value == cardValue; });
@@ -236,7 +225,6 @@ private:
     }
 };
 
-// Game class
 class BlackjackGame {
 private:
     Deck deck;
@@ -255,23 +243,20 @@ public:
         deck.shuffle();
         playerHand.clear();
         dealerHand.clear();
-        
-        // Initial deal
+
         playerHand.addCard(deck.dealCard());
-        dealerHand.addCard(deck.dealCard()); // Hole card
+        dealerHand.addCard(deck.dealCard());
         playerHand.addCard(deck.dealCard());
-        dealerHand.addCard(deck.dealCard()); // Up card
+        dealerHand.addCard(deck.dealCard());
         
         displayHands(true);
-        
-        // Calculate initial probability
+
         cout << "\n--- Initial Hand Analysis ---\n";
         double initialProb = ProbabilityCalculator::calculateWinProbability(
             playerHand, dealerHand, deck.getRemainingCards());
         cout << "Player's winning probability: " << fixed << setprecision(2) 
              << initialProb << "%\n";
-        
-        // Check for blackjacks
+
         if (playerHand.isBlackjack() && dealerHand.isBlackjack()) {
             cout << "\nBoth have Blackjack! Push!\n";
             return;
@@ -285,19 +270,16 @@ public:
             cout << "\nDealer has Blackjack! Player loses.\n";
             return;
         }
-        
-        // Player's turn
+
         playerTurn();
         
         if (playerHand.isBust()) {
             cout << "\nPlayer busts! Player loses $" << bet << "\n";
             return;
         }
-        
-        // Dealer's turn
+
         dealerTurn();
-        
-        // Determine winner
+
         determineWinner();
     }
     
